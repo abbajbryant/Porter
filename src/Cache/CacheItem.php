@@ -31,7 +31,7 @@ final class CacheItem implements CacheItemInterface
     /**
      * @return mixed
      */
-    public function get()
+    public function get(): mixed
     {
         return $this->value;
     }
@@ -44,19 +44,19 @@ final class CacheItem implements CacheItemInterface
     /**
      * @param mixed $value
      */
-    public function set($value): self
+    public function set($value): static
     {
         $this->value = $value;
 
         return $this;
     }
 
-    public function expiresAt($expiration): self
+    public function expiresAt($expiration): static
     {
         throw new NotImplementedException;
     }
 
-    public function expiresAfter($time): self
+    public function expiresAfter($time): static
     {
         throw new NotImplementedException;
     }

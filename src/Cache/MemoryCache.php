@@ -14,9 +14,9 @@ class MemoryCache extends \ArrayObject implements CacheItemPoolInterface
     /**
      * @param string $key
      *
-     * @return mixed
+     * @return CacheItemInterface
      */
-    public function getItem($key)
+    public function getItem(string $key): CacheItemInterface
     {
         return \Closure::bind(
             function () use ($key): self {
@@ -39,17 +39,19 @@ class MemoryCache extends \ArrayObject implements CacheItemPoolInterface
         return isset($this[$key]);
     }
 
-    public function clear(): void
+    public function clear(): bool
     {
         $this->exchangeArray([]);
+        return true;
     }
 
-    public function deleteItem($key): void
+    public function deleteItem($key): bool
     {
         unset($this[$key]);
+        return true;
     }
 
-    public function deleteItems(array $keys): void
+    public function deleteItems(array $keys): bool
     {
         foreach ($keys as $key) {
             if (!$this->hasItem($key)) {
@@ -58,16 +60,18 @@ class MemoryCache extends \ArrayObject implements CacheItemPoolInterface
 
             $this->deleteItem($key);
         }
+        return true;
     }
 
-    public function save(CacheItemInterface $item): void
+    public function save(CacheItemInterface $item): bool
     {
         $this[$item->getKey()] = $item->get();
+        return true;
     }
 
-    public function saveDeferred(CacheItemInterface $item): void
+    public function saveDeferred(CacheItemInterface $item): bool
     {
-        $this->save($item);
+        return $this->save($item);
     }
 
     public function commit(): bool
